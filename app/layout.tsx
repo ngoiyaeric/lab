@@ -12,9 +12,9 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'Morphic'
+const title = 'queue'
 const description =
-  'A fully open-source AI-powered answer engine with a generative UI.'
+  'WE OUTSIDE'
 
 export const metadata: Metadata = {
   title,
