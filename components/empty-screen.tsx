@@ -3,12 +3,12 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
-    heading: 'What is a Solar Panel?',
-    message: 'What is a Solar Panel?'
+    heading: 'What are some of the tallest trees?',
+    message: 'What are some of the tallest trees?'
   },
   {
-    heading: 'When is the next Solar eclipse?',
-    message: 'When is the next Solar eclipse?'
+    heading: 'When is the next Lunar eclipse?',
+    message: 'When is the next Lunar eclipse?'
   },
   {
     heading: 'How far is Mars?',
