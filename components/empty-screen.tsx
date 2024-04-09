@@ -3,12 +3,12 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
-    heading: 'Why are EVs better for the environment?',
-    message: 'Why are EVs better for the environment?'
+    heading: 'What is a Solar Panel?',
+    message: 'What is a Solar Panel?'
   },
   {
-    heading: 'When is the next eclippse?',
-    message: 'When is the next eclippse?'
+    heading: 'When is the next Solar eclipse?',
+    message: 'When is the next Solar eclipse?'
   },
   {
     heading: 'How far is Mars?',
