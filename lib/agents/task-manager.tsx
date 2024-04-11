@@ -6,7 +6,7 @@ import { nextActionSchema } from '../schema/next-action'
 export async function taskManager(messages: ExperimentalMessage[]) {
   const result = await experimental_generateObject({
     model: openai.chat('gpt-3.5-turbo'),
-    system: `As a professional web researcher, your primary objective is to fully comprehend the user's query, conduct thorough web searches to gather the necessary information, and provide an appropriate response.
+    system: `if you know the answer provide it immediately.As a professional web researcher, your primary objective is to fully comprehend the user's query, conduct thorough web searches to gather the necessary information, and provide an appropriate response.
     To achieve this, you must first analyze the user's input and determine the optimal course of action. You have two options at your disposal:
     1. "proceed": If the provided information is sufficient to address the query effectively, choose this option to proceed with the research and formulate a response.
     2. "inquire": If you believe that additional information from the user would enhance your ability to provide a comprehensive response, select this option. You may present a form to the user, offering default selections or free-form input fields, to gather the required details.

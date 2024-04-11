@@ -32,7 +32,7 @@ export async function researcher(
   const result = await experimental_streamText({
     model: openai.chat('gpt-4-turbo-preview'),
     maxTokens: 2500,
-    system: `As a professional search expert, you possess the ability to search for any information on the web. 
+    system: `if you know the answer provide it immediately. As a professional search expert, you possess the ability to search for any information on the web. 
     For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
     If there are any images relevant to your answer, be sure to include them as well.
     Aim to directly address the user's question, augmenting your response with insights gleaned from the search results.
