@@ -7,8 +7,8 @@ const exampleMessages = [
     message: 'What are some of the tallest trees?'
   },
   {
-    heading: 'When is the next Lunar eclipse?',
-    message: 'When is the next Lunar eclipse?'
+    heading: 'When is the next lunar eclipse?',
+    message: 'When is the next lunar eclipse?'
   },
   {
     heading: 'How far is Mars?',
