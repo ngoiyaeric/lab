@@ -10,7 +10,7 @@ import Footer from '@/components/footer'
 const IBM_Plex_Mono = FontMono({
   subsets: ['latin'],
   variable: '--font-mono',
-  weight: '100'
+  weight: '500'
 })
 
 const title = 'queue'
