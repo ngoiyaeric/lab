@@ -7,29 +7,22 @@ import {
 } from 'ai'
 import { searchSchema } from '@/lib/schema/search'
 import { Section } from '@/components/section'
-import { OpenAI } from '@ai-sdk/openai'
+import { openai } from 'ai/openai'
 import { ToolBadge } from '@/components/tool-badge'
 import { SearchSkeleton } from '@/components/search-skeleton'
 import { SearchResults } from '@/components/search-results'
 import { BotMessage } from '@/components/message'
 import Exa from 'exa-js'
 import { SearchResultsImageSection } from '@/components/search-results-image'
-import { Card } from '@/components/ui/card'
 
 export async function researcher(
   uiStream: ReturnType<typeof createStreamableUI>,
   streamText: ReturnType<typeof createStreamableValue<string>>,
   messages: ExperimentalMessage[]
 ) {
-  const openai = new OpenAI({
-    baseUrl: process.env.OPENAI_API_BASE, // optional base URL for proxies etc.
-    apiKey: process.env.OPENAI_API_KEY, // optional API key, default to env property OPENAI_API_KEY
-    organization: '' // optional organization
-  })
-
   const searchAPI: 'tavily' | 'exa' = 'tavily'
+
   let fullResponse = ''
-  let hasError = false
   const answerSection = (
     <Section title="Answer">
       <BotMessage content={streamText.value} />
@@ -37,14 +30,13 @@ export async function researcher(
   )
 
   const result = await experimental_streamText({
-    model: openai.chat(process.env.OPENAI_API_MODEL || 'gpt-4-turbo'),
+    model: openai.chat('gpt-4-turbo-preview'),
     maxTokens: 2500,
     system: `if you know the answer provide it immediately. As a professional search expert, you possess the ability to search for any information on the web. 
     For each user query, utilize the search results to their fullest potential to provide additional information and assistance in your response.
     If there are any images relevant to your answer, be sure to include them as well.
     Aim to directly address the user's question, augmenting your response with insights gleaned from the search results.
     Whenever quoting or referencing information from a specific URL, always cite the source URL explicitly.
-    Please match the language of the response to the user's language.
     `,
     messages,
     tools: {
@@ -72,29 +64,10 @@ export async function researcher(
             </Section>
           )
 
-          // Tavily API requires a minimum of 5 characters in the query
-          const filledQuery =
-            query.length < 5 ? query + ' '.repeat(5 - query.length) : query
-          let searchResult
-          try {
-            searchResult =
-              searchAPI === 'tavily'
-                ? await tavilySearch(filledQuery, max_results, search_depth)
-                : await exaSearch(query)
-          } catch (error) {
-            console.error('Search API error:', error)
-            hasError = true
-          }
-
-          if (hasError) {
-            fullResponse += `\nAn error occurred while searching for "${query}.`
-            uiStream.update(
-              <Card className="p-4 mt-2 text-sm">
-                {`An error occurred while searching for "${query}".`}
-              </Card>
-            )
-            return searchResult
-          }
+          const searchResult =
+            searchAPI === 'tavily'
+              ? await tavilySearch(query, max_results, search_depth)
+              : await exaSearch(query)
 
           uiStream.update(
             <Section title="Images">
@@ -141,7 +114,6 @@ export async function researcher(
         toolResponses.push(delta)
         break
       case 'error':
-        hasError = true
         fullResponse += `\nError occurred while executing the tool`
         break
     }
@@ -156,7 +128,7 @@ export async function researcher(
     messages.push({ role: 'tool', content: toolResponses })
   }
 
-  return { result, fullResponse, hasError }
+  return { result, fullResponse }
 }
 
 async function tavilySearch(

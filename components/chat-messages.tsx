@@ -1,6 +1,5 @@
-import { StreamableValue, useUIState } from 'ai/rsc'
+import { useUIState } from 'ai/rsc'
 import type { AI } from '@/app/action'
-import { CollapsibleMessage } from './collapsible-message'
 
 export function ChatMessages() {
   const [messages, setMessages] = useUIState<typeof AI>()
@@ -10,20 +9,6 @@ export function ChatMessages() {
       {messages.map((message: { id: number; component: React.ReactNode }) => (
         <div key={message.id}>{message.component}</div>
       ))}
-      
-        {messages.map(
-        (message: {
-          id: number
-          component: React.ReactNode
-          isCollapsed?: StreamableValue<boolean>
-        }) => (
-          <CollapsibleMessage
-            key={message.id}
-            message={message}
-            isLastMessage={message.id === messages[messages.length - 1].id}
-          />
-        )
-      )}
     </>
   )
 }

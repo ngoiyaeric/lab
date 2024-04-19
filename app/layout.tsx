@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { IBM_Plex_Mono as FontMono } from 'next/font/google'
+import { Inter as FontSans } from 'next/font/google'
 import { AI } from './action'
 import './globals.css'
 import { cn } from '@/lib/utils'
@@ -7,14 +7,14 @@ import { ThemeProvider } from '@/components/theme-provider'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
-const IBM_Plex_Mono = FontMono({
+const fontSans = FontSans({
   subsets: ['latin'],
-  variable: '--font-mono',
-  weight: '500'
+  variable: '--font-sans'
 })
 
 const title = 'queue'
-const description = 'WE OUTSIDE'
+const description =
+  'WE OUTSIDE'
 
 export const metadata: Metadata = {
   title,
@@ -32,10 +32,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  minimumScale: 1,
-  maximumScale: 1
+  minimumScale: 1
 }
 
 export default function RootLayout({
@@ -45,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('font-mono antialiased', IBM_Plex_Mono.variable)}>
+      <body className={cn('font-sans antialiased', fontSans.variable)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

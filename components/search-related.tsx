@@ -35,6 +35,7 @@ export const SearchRelated: React.FC<SearchRelatedProps> = ({
 
     const userMessage = {
       id: Date.now(),
+      isGenerating: false,
       component: <UserMessage message={query} isFirstMessage={false} />
     }
 

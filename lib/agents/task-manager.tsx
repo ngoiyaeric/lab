@@ -1,19 +1,11 @@
 import { ExperimentalMessage, experimental_generateObject } from 'ai'
-import { OpenAI } from '@ai-sdk/openai'
+import { openai } from 'ai/openai'
 import { nextActionSchema } from '../schema/next-action'
 
 // Decide whether inquiry is required for the user input
 export async function taskManager(messages: ExperimentalMessage[]) {
-  const openai = new OpenAI({
-    baseUrl: process.env.OPENAI_API_BASE, // optional base URL for proxies etc.
-    apiKey: process.env.OPENAI_API_KEY, // optional API key, default to env property OPENAI_API_KEY
-    organization: '' // optional organization
-  })
-
-  try {
-    const result = await experimental_generateObject({
-      model: openai.chat(process.env.OPENAI_API_MODEL || 'gpt-4-turbo'),
-
+  const result = await experimental_generateObject({
+    model: openai.chat('gpt-3.5-turbo'),
     system: `if you know the answer provide it immediately.As a professional web researcher, your primary objective is to fully comprehend the user's query, conduct thorough web searches to gather the necessary information, and provide an appropriate response.
     To achieve this, you must first analyze the user's input and determine the optimal course of action. You have two options at your disposal:
     1. "proceed": If the provided information is sufficient to address the query effectively, choose this option to proceed with the research and formulate a response.
@@ -26,9 +18,6 @@ export async function taskManager(messages: ExperimentalMessage[]) {
     messages,
     schema: nextActionSchema
   })
+
   return result
-} catch (error) {
-  console.error(error)
-  return null
-}
 }
