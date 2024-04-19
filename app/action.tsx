@@ -42,7 +42,7 @@ async function submit(formData?: FormData, skip?: boolean) {
 
     let action: any = { object: { next: 'proceed' } }
     // If the user skips the task, we proceed to the search
-    
+
     if (!skip) action = (await taskManager(messages)) ?? action
     if (action.object.next === 'inquire') {
       // Generate inquiry
@@ -58,7 +58,7 @@ async function submit(formData?: FormData, skip?: boolean) {
       return
     }
 
-     // Set the collapsed state to true
+    // Set the collapsed state to true
     isCollapsed.done(true)
     //  Generate the answer
     let answer = ''
@@ -78,20 +78,19 @@ async function submit(formData?: FormData, skip?: boolean) {
     streamText.done()
 
     // Generate related queries
-    await querySuggestor(uiStream, messages)
 
     if (!errorOccurred) {
       // Generate related queries
       await querySuggestor(uiStream, messages)
 
-    // Add follow-up panel
-           // Add follow-up panel
-           uiStream.append(
-            <Section title="Follow-up">
-              <FollowupPanel />
-            </Section>
-          )
-        }
+      // Add follow-up panel
+      // Add follow-up panel
+      uiStream.append(
+        <Section title="Follow-up">
+          <FollowupPanel />
+        </Section>
+      )
+    }
 
     isGenerating.done(false)
     uiStream.done()
