@@ -10,6 +10,7 @@ export function ChatMessages() {
       {messages.map((message: { id: number; component: React.ReactNode }) => (
         <div key={message.id}>{message.component}</div>
       ))}
+      
         {messages.map(
         (message: {
           id: number

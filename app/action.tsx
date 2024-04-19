@@ -82,8 +82,6 @@ async function submit(formData?: FormData, skip?: boolean) {
     if (!errorOccurred) {
       // Generate related queries
       await querySuggestor(uiStream, messages)
-
-      // Add follow-up panel
       // Add follow-up panel
       uiStream.append(
         <Section title="Follow-up">
