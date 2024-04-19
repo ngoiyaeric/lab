@@ -17,11 +17,9 @@ async function submit(formData?: FormData, skip?: boolean) {
   const aiState = getMutableAIState<typeof AI>()
   const uiStream = createStreamableUI()
   const isGenerating = createStreamableValue(true)
-  const isCollapsed = createStreamableValue(false)
 
   const messages: ExperimentalMessage[] = aiState.get() as any
   // Get the user input from the form data
-  messages.splice(0, Math.max(messages.length - 10, 0))
   const userInput = skip
     ? `{"action": "skip"}`
     : (formData?.get('input') as string)
@@ -42,15 +40,14 @@ async function submit(formData?: FormData, skip?: boolean) {
 
     let action: any = { object: { next: 'proceed' } }
     // If the user skips the task, we proceed to the search
+    if (!skip) action = await taskManager(messages)
 
-    if (!skip) action = (await taskManager(messages)) ?? action
     if (action.object.next === 'inquire') {
       // Generate inquiry
       const inquiry = await inquire(uiStream, messages)
 
       uiStream.done()
       isGenerating.done()
-      isCollapsed.done(false)
       aiState.done([
         ...aiState.get(),
         { role: 'assistant', content: `inquiry: ${inquiry?.question}` }
@@ -58,37 +55,25 @@ async function submit(formData?: FormData, skip?: boolean) {
       return
     }
 
-    // Set the collapsed state to true
-    isCollapsed.done(true)
     //  Generate the answer
     let answer = ''
-    let errorOccurred = false
     const streamText = createStreamableValue<string>()
     while (answer.length === 0) {
       // Search the web and generate the answer
-      const { fullResponse, hasError } = await researcher(
-        uiStream,
-        streamText,
-        messages
-      )
-
+      const { fullResponse } = await researcher(uiStream, streamText, messages)
       answer = fullResponse
-      errorOccurred = hasError
     }
     streamText.done()
 
     // Generate related queries
+    await querySuggestor(uiStream, messages)
 
-    if (!errorOccurred) {
-      // Generate related queries
-      await querySuggestor(uiStream, messages)
-      // Add follow-up panel
-      uiStream.append(
-        <Section title="Follow-up">
-          <FollowupPanel />
-        </Section>
-      )
-    }
+    // Add follow-up panel
+    uiStream.append(
+      <Section title="Follow-up">
+        <FollowupPanel />
+      </Section>
+    )
 
     isGenerating.done(false)
     uiStream.done()
@@ -100,8 +85,7 @@ async function submit(formData?: FormData, skip?: boolean) {
   return {
     id: Date.now(),
     isGenerating: isGenerating.value,
-    component: uiStream.value,
-    isCollapsed: isCollapsed.value
+    component: uiStream.value
   }
 }
 
@@ -116,8 +100,7 @@ const initialAIState: {
 // The initial UI state that the client will keep track of, which contains the message IDs and their UI nodes.
 const initialUIState: {
   id: number
-  isGenerating?: StreamableValue<boolean>
-  isCollapsed?: StreamableValue<boolean>
+  isGenerating: StreamableValue<boolean>
   component: React.ReactNode
 }[] = []
 
