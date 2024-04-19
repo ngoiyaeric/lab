@@ -5,12 +5,12 @@ import { Section } from '@/components/section'
 import SearchRelated from '@/components/search-related'
 import { openai } from 'ai/openai'
 
-export async function querySuggestor(
+export async function querySuggestor (
   uiStream: ReturnType<typeof createStreamableUI>,
   messages: ExperimentalMessage[]
 ) {
   const objectStream = createStreamableValue<PartialRelated>()
-  uiStream.append(
+  uiStream.append (
     <Section title="Related" separator={true}>
       <SearchRelated relatedQueries={objectStream.value} />
     </Section>
@@ -34,6 +34,7 @@ export async function querySuggestor(
     `,
     messages,
     schema: relatedSchema
+
   })
     .then(async result => {
       for await (const obj of result.partialObjectStream) {

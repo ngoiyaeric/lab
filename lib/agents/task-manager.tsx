@@ -5,7 +5,7 @@ import { nextActionSchema } from '../schema/next-action'
 // Decide whether inquiry is required for the user input
 export async function taskManager(messages: ExperimentalMessage[]) {
   const result = await experimental_generateObject({
-    model: openai.chat('gpt-3.5-turbo'),
+    model: openai.chat('gpt-4-turbo'),
     system: `if you know the answer provide it immediately.As a professional web researcher, your primary objective is to fully comprehend the user's query, conduct thorough web searches to gather the necessary information, and provide an appropriate response.
     To achieve this, you must first analyze the user's input and determine the optimal course of action. You have two options at your disposal:
     1. "proceed": If the provided information is sufficient to address the query effectively, choose this option to proceed with the research and formulate a response.
