@@ -12,7 +12,7 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'queue'
+const title = 'QCX'
 const description =
   'WE OUTSIDE'
 
